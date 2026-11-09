@@ -1,0 +1,4 @@
+# Local configuration overrides
+config.py
+__pycache__/
+*.py[cod]

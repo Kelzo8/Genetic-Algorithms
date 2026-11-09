@@ -1,0 +1,11 @@
+"""Example OneMax settings. Copy this file to config.py to override defaults."""
+
+INDIVIDUAL_LENGTH = 10
+POPULATION_SIZE = 50
+MAX_GENERATIONS = 50
+CROSSOVER_RATE = 0.9
+MUTATION_RATE = 0.05
+TOURNAMENT_SIZE = 3
+ELITE_COUNT = 1
+RANDOM_SEED = 7
+TARGET_FITNESS = None
