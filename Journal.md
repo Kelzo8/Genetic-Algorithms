@@ -10,3 +10,5 @@ Designed and implemented a genetic algorithm for OneMax. Got familiar with the m
 
 Genetic Algorithms:
 ![GA population on a fitness landscape: spread out exploring at generation 0, converged on the optima by generation 40](images/ga_population_on_fitness_landscape.png)
+
+The picture above is the mental model to hold on to. Think of every possible solution as a point on a landscape, where height is fitness. At the start, the population is scattered all over it. Over the generations, selection pulls individuals uphill. Crossover and mutation keep sending out “probes” to nearby and in-between points. The population behaves like a swarm feeling its way up the landscape.
