@@ -37,63 +37,78 @@ SAMPLE_POINTS = [i / 10 for i in range(-10, 11)]  # x = -1.0, -0.9, ..., 1.0
 
 
 # ---- Primitive set ----
+# Each function is (callable, arity). Trees can use any arity, not just binary.
 def protected_div(a, b):
     return a / b if abs(b) > 1e-6 else 1.0
 
 
 FUNCTIONS = {
-    '+': operator.add,
-    '-': operator.sub,
-    '*': operator.mul,
-    '/': protected_div,
+    '+': (operator.add, 2),
+    '-': (operator.sub, 2),
+    '*': (operator.mul, 2),
+    '/': (protected_div, 2),
+    'neg': (operator.neg, 1),
 }
 TERMINALS = ['x', 1, 2]
 
 
 # ---- Tree representation ----
-# A tree is either a terminal ('x' or a number) or a tuple (op, left, right).
+# A tree is either a terminal ('x' or a number) or a tuple
+# (op, child1, child2, ..., child_arity) — arity comes from FUNCTIONS[op].
+def children(tree):
+    return tree[1:]
+
+
 def random_tree(depth, method):
     """Build a random tree using the 'full' or 'grow' method."""
     if depth == 0 or (method == 'grow' and random.random() < TERMINAL_PROB):
         return random.choice(TERMINALS)
     op = random.choice(list(FUNCTIONS))
-    return (op, random_tree(depth - 1, method), random_tree(depth - 1, method))
+    arity = FUNCTIONS[op][1]
+    return (op, *(random_tree(depth - 1, method) for _ in range(arity)))
 
 
 def evaluate(tree, x):
     if isinstance(tree, tuple):
-        op, left, right = tree
-        return FUNCTIONS[op](evaluate(left, x), evaluate(right, x))
+        op, *args = tree
+        func, _arity = FUNCTIONS[op]
+        return func(*(evaluate(child, x) for child in args))
     return x if tree == 'x' else tree
 
 
 def depth(tree):
     if isinstance(tree, tuple):
-        return 1 + max(depth(tree[1]), depth(tree[2]))
+        kids = children(tree)
+        return 1 + (max(depth(child) for child in kids) if kids else 0)
     return 0
 
 
 def size(tree):
     if isinstance(tree, tuple):
-        return 1 + size(tree[1]) + size(tree[2])
+        return 1 + sum(size(child) for child in children(tree))
     return 1
 
 
 def to_string(tree):
     if isinstance(tree, tuple):
-        op, left, right = tree
-        return f"({to_string(left)} {op} {to_string(right)})"
+        op, *args = tree
+        rendered = [to_string(arg) for arg in args]
+        if len(args) == 1:
+            return f"{op}({rendered[0]})"
+        if len(args) == 2 and op in {'+', '-', '*', '/'}:
+            return f"({rendered[0]} {op} {rendered[1]})"
+        return f"{op}({', '.join(rendered)})"
     return str(tree)
 
 
 # ---- Subtree helpers (used by crossover and mutation) ----
 # A node is addressed by its path from the root: () is the root, (1,) is the
-# root's left child, (1, 2) is that child's right child, and so on.
+# first child, (1, 2) is that child's second child, and so on.
 def node_paths(tree, path=()):
     yield path
     if isinstance(tree, tuple):
-        yield from node_paths(tree[1], path + (1,))
-        yield from node_paths(tree[2], path + (2,))
+        for i, child in enumerate(children(tree), start=1):
+            yield from node_paths(child, path + (i,))
 
 
 def get_subtree(tree, path):
