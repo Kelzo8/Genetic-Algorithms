@@ -20,3 +20,4 @@ The picture above is the mental model to hold on to. Think of every possible sol
 - Fitness: GA scores a string GP runs a tree as a program and scores its output.
 
 - Used Graphviz for visualising the tree to see the terminals and operators
+
