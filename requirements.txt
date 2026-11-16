@@ -1,0 +1,12 @@
+# Pinned so results can be reproduced exactly (tested on Python 3.13).
+# Install with:  python -m pip install -r requirements.txt
+# No EA frameworks: all GP/GA components are written in this repo.
+
+numpy==2.5.5        # vectorised tree evaluation and distance matrices
+scipy==1.18.1       # statistics: Wilcoxon rank-sum (scipy.stats.ranksums)
+matplotlib==3.11.2  # convergence curves and tour plots
+pytest==9.2.0       # unit tests
+
+# Optional: drawing GP trees (GP/visualisation.py). Also needs the Graphviz
+# program itself, e.g. `brew install graphviz` on macOS.
+graphviz==0.21
