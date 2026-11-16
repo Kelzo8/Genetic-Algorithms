@@ -2,3 +2,6 @@
 /config.py
 __pycache__/
 *.py[cod]
+
+# Tree image written by symreg/main.py on every run
+gp_tree.png

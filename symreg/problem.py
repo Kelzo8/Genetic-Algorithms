@@ -1,7 +1,7 @@
 """Symbolic regression problem: data and terminal set.
 
 Each problem supplies its own terminals and fitness function, which are
-passed into genetic_programming(), so the GP engine stays problem-independent.
+passed into GP.genetic_programming(), so the engine stays problem-independent.
 """
 
 # Hidden target function used to generate training outputs

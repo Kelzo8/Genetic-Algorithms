@@ -1,7 +1,7 @@
 import math
 
-from problem import TRAINING_DATA
-from tree import evaluate
+from .problem import TRAINING_DATA
+from GP.tree import evaluate
 
 
 def fitness(tree, data=TRAINING_DATA):

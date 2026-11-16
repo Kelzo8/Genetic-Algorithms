@@ -1,4 +1,4 @@
-from primitives import FUNCTIONS
+from .primitives import FUNCTIONS
 
 
 def children(tree):
