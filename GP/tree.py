@@ -8,17 +8,24 @@ def children(tree):
     return []
 
 
-def evaluate(tree, x):
-    """Evaluate an expression tree for a given x value."""
+def evaluate(tree, env, functions=FUNCTIONS):
+    """Evaluate an expression tree.
+
+    env maps terminal names to values, e.g. {'x': 3} or
+    {'dist_current': array([...]), ...}. Numeric terminals are constants.
+    """
     if isinstance(tree, tuple):
         op, *args = tree
-        func, _arity = FUNCTIONS[op]
+        func, _arity = functions[op]
 
         return func(
-            *(evaluate(child, x) for child in args)
+            *(evaluate(child, env, functions) for child in args)
         )
 
-    return x if tree == 'x' else tree
+    if isinstance(tree, str):
+        return env[tree]
+
+    return tree
 
 
 def depth(tree):

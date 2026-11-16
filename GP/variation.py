@@ -1,5 +1,6 @@
 import random
-from config import MAX_DEPTH
+from gp_config import MAX_DEPTH, MUTATION_SUBTREE_DEPTH
+from primitives import FUNCTIONS
 from tree import (
     depth,
     node_paths,
@@ -33,7 +34,7 @@ def subtree_crossover(parent1, parent2):
     return parent1
 
 
-def subtree_mutation(parent):
+def subtree_mutation(parent, terminals, functions=FUNCTIONS):
     """Replace a random subtree with a newly generated tree."""
 
     point = random.choice(
@@ -43,7 +44,7 @@ def subtree_mutation(parent):
     child = replace_subtree(
         parent,
         point,
-        random_tree(2, 'grow')
+        random_tree(MUTATION_SUBTREE_DEPTH, 'grow', terminals, functions)
     )
 
     # Reject offspring that exceed the maximum depth

@@ -4,19 +4,19 @@ from problem import TRAINING_DATA
 from tree import evaluate
 
 
-def fitness(tree):
-    """Calculate mean absolute error against supplied examples."""
+def fitness(tree, data=TRAINING_DATA):
+    """Mean absolute error against supplied examples (lower is better)."""
 
     try:
         error = sum(
-            abs(evaluate(tree, x) - y)
-            for x, y in TRAINING_DATA
+            abs(evaluate(tree, {'x': x}) - y)
+            for x, y in data
         )
 
         if not math.isfinite(error):
             return math.inf
 
-        return error / len(TRAINING_DATA)
+        return error / len(data)
 
     except (OverflowError, ValueError, ZeroDivisionError):
         return math.inf

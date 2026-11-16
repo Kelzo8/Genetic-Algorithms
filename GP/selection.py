@@ -1,15 +1,15 @@
 
 import random
 
-from config import TOURNAMENT_SIZE
+from gp_config import TOURNAMENT_SIZE
 
 
-def tournament_selection(population, fitnesses):
+def tournament_selection(population, fitnesses, tournament_size=TOURNAMENT_SIZE):
     """Select the individual with the best fitness from a random tournament."""
 
     contestants = random.sample(
         range(len(population)),
-        TOURNAMENT_SIZE
+        tournament_size
     )
 
     winner = min(

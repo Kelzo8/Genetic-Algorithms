@@ -1,5 +1,7 @@
 import random
-from config import (
+from dataclasses import dataclass, field
+
+from gp_config import (
     POPULATION_SIZE,
     MAX_GENERATIONS,
     CROSSOVER_RATE,
@@ -8,7 +10,7 @@ from config import (
     TARGET_FITNESS
 )
 from initialisation import ramped_half_and_half
-from fitness import fitness
+from primitives import FUNCTIONS
 from tree import size, to_string
 from selection import tournament_selection
 from variation import (
@@ -17,16 +19,45 @@ from variation import (
 )
 
 
-def genetic_programming():
+@dataclass
+class GPResult:
+    """Outcome of one GP run. Fitness is minimised (lower is better)."""
+    best: object
+    best_fitness: float
+    generations: int
+    success: bool
+    best_fitness_history: list = field(default_factory=list)
+    avg_size_history: list = field(default_factory=list)
+
+
+def genetic_programming(fitness_fn, terminals, functions=FUNCTIONS,
+                        population_size=POPULATION_SIZE,
+                        max_generations=MAX_GENERATIONS,
+                        crossover_rate=CROSSOVER_RATE,
+                        mutation_rate=MUTATION_RATE,
+                        elitism=ELITISM,
+                        target_fitness=TARGET_FITNESS,
+                        verbose=True):
+    """Run GP for any problem.
+
+    fitness_fn(tree) -> float (lower is better); terminals and functions
+    define the primitive set. Set target_fitness=None to always run the full
+    number of generations. Returns a GPResult with per-generation history
+    for convergence curves.
+    """
 
     # Generate initial population
-    population = ramped_half_and_half()
+    population = ramped_half_and_half(terminals, functions, population_size)
 
-    for generation in range(MAX_GENERATIONS):
+    best_history = []
+    size_history = []
+    generation = 0
+
+    while True:
 
         # Evaluate every individual
         fitnesses = [
-            fitness(tree) for tree in population
+            fitness_fn(tree) for tree in population
         ]
 
         # Find the best individual
@@ -42,24 +73,38 @@ def genetic_programming():
             size(tree) for tree in population
         ) / len(population)
 
+        best_history.append(fitnesses[best_idx])
+        size_history.append(avg_size)
+
         # Display generation statistics
-        print(
-            f"Gen {generation:2d} | "
-            f"error = {fitnesses[best_idx]:.6f} | "
-            f"avg size = {avg_size:5.1f} | "
-            f"{to_string(best)}"
-        )
-
-        # Check whether a perfect solution was found
-        if fitnesses[best_idx] < TARGET_FITNESS:
-
+        if verbose:
             print(
-                f"\nPerfect program found in generation {generation}:"
+                f"Gen {generation:2d} | "
+                f"fitness = {fitnesses[best_idx]:.6f} | "
+                f"avg size = {avg_size:5.1f} | "
+                f"{to_string(best)}"
             )
 
-            print(f"  {to_string(best)}")
+        # Stop if a good enough solution was found or the budget is used up
+        success = (target_fitness is not None
+                   and fitnesses[best_idx] < target_fitness)
 
-            return best
+        if success or generation >= max_generations:
+            if verbose:
+                if success:
+                    print(f"\nTarget reached in generation {generation}:")
+                else:
+                    print("\nReached the generation limit.")
+                print(f"  {to_string(best)} (fitness = {fitnesses[best_idx]:.6f})")
+
+            return GPResult(
+                best=best,
+                best_fitness=fitnesses[best_idx],
+                generations=generation,
+                success=success,
+                best_fitness_history=best_history,
+                avg_size_history=size_history,
+            )
 
         # Elitism: preserve the best individuals
         ranked = sorted(
@@ -68,11 +113,11 @@ def genetic_programming():
         )
 
         next_population = [
-            population[i] for i in ranked[:ELITISM]
+            population[i] for i in ranked[:elitism]
         ]
 
         # Generate offspring to fill the next population
-        while len(next_population) < POPULATION_SIZE:
+        while len(next_population) < population_size:
 
             r = random.random()
 
@@ -81,7 +126,7 @@ def genetic_programming():
                 fitnesses
             )
 
-            if r < CROSSOVER_RATE:
+            if r < crossover_rate:
 
                 other = tournament_selection(
                     population,
@@ -93,9 +138,9 @@ def genetic_programming():
                     other
                 )
 
-            elif r < CROSSOVER_RATE + MUTATION_RATE:
+            elif r < crossover_rate + mutation_rate:
 
-                child = subtree_mutation(parent)
+                child = subtree_mutation(parent, terminals, functions)
 
             else:
 
@@ -106,24 +151,4 @@ def genetic_programming():
 
         # Replace old population
         population = next_population
-
-    # Find the best individual after the final generation
-    final_fitnesses = [
-        fitness(tree) for tree in population
-    ]
-
-    best_idx = min(
-        range(len(population)),
-        key=lambda i: final_fitnesses[i]
-    )
-
-    best = population[best_idx]
-
-    print("\nReached the generation limit.")
-
-    print(
-        f"Best program: {to_string(best)} "
-        f"(error = {final_fitnesses[best_idx]:.6f})"
-    )
-
-    return best
+        generation += 1

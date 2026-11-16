@@ -1,8 +1,12 @@
+"""Symbolic regression problem: data and terminal set.
+
+Each problem supplies its own terminals and fitness function, which are
+passed into genetic_programming(), so the GP engine stays problem-independent.
+"""
 
 # Hidden target function used to generate training outputs
-#def target(x):
-    #return x * x + x + 1
-
+# def target(x):
+#     return x * x + x + 1
 
 # Supplied input/output examples
 TRAINING_DATA = [
@@ -12,3 +16,6 @@ TRAINING_DATA = [
     (4, 21),
     (5, 31)
 ]
+
+# Terminal set: the input variable plus two constants
+TERMINALS = ['x', 1, 2]
