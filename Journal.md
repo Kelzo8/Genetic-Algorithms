@@ -21,6 +21,9 @@ The picture above is the mental model to hold on to. Think of every possible sol
 
 - Used Graphviz for visualising the tree to see the terminals and operators
 
+## Testing our GP
+- Our GP did quite well with the first set of data, achieving perfect fitness within 3 generations. However it never achieved perfect fitness for second set of data. We tried changing the numerous variables such as generation, population etc. to achieve a lower MAE but it still wasn't enough to get to the correct formula fully.
+
 ## Project Comparison: Flappy Bird vs Pac-Man
 ## Overview
 
