@@ -59,3 +59,8 @@ The simplest possible rule, "go to the nearest city", is the classic nearest-nei
 ### Research question
 Can GP evolve a heuristic that beats nearest neighbour and still works on larger maps it has never seen?
 
+## Decision: fixed training set 
+
+We score every tree on the same set of training maps for the whole run, instead of new maps each generation.
+
+- Same maps means fitness values are directly comparable and deterministic, so we can cache them and the convergence curves are clean.
