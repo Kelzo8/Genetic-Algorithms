@@ -43,3 +43,19 @@ The picture above is the mental model to hold on to. Think of every possible sol
 | Generalisation: train easy, test hard | Co-evolve ghosts as a second population |
 | GP vs GE on the same controller | GP vs GE on the same controller |
 
+
+## Idea: GP for the Travelling Salesman Problem — evolve a heuristic. Not evolving a tour
+
+### Concept
+- A TSP solution is an ordering of cities, which suits a GA better than GP. 
+Evolving one tour also only solves one map.
+
+- Instead, we will use GP to evolve a **rule for building tours** that works on any map. 
+
+At each step, the evolved tree scores every unvisited city and the tour moves to the best one. The tree's inputs are simple facts about each candidate city, such as its distance from the current city and from the remaining cities.
+
+The simplest possible rule, "go to the nearest city", is the classic nearest-neighbour heuristic. Our goal is to see whether GP can evolve something better.
+
+### Research question
+Can GP evolve a heuristic that beats nearest neighbour and still works on larger maps it has never seen?
+
