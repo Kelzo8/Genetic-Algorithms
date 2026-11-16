@@ -1,15 +1,16 @@
 # Genetic-Algorithms
 
-## OneMax
+## Exercises
 
-Run the genetic algorithm with:
+Early standalone exercises live in `exercises/`. They don't use the GP engine.
 
 ```bash
-python onemax_ga.py
+python exercises/onemax_ga.py               # GA on OneMax
+python exercises/symbolic_regression_gp.py  # first standalone GP (symbolic regression)
 ```
 
-The default settings are in `config.example.py`. To use local settings, copy it
-to `config.py` and edit that file; `config.py` is ignored by Git.
+OneMax's default settings are in `exercises/config.example.py`. To use local
+settings, copy it to `exercises/config.py` and edit that file; it is ignored by Git.
 
 ## Setup
 
