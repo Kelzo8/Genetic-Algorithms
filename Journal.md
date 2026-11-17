@@ -64,3 +64,20 @@ Can GP evolve a heuristic that beats nearest neighbour and still works on larger
 We score every tree on the same set of training maps for the whole run, instead of new maps each generation.
 
 - Same maps means fitness values are directly comparable and deterministic, so we can cache them and the convergence curves are clean.
+
+# 17/11/26 — Presentation and Research
+
+## Research influencing our design
+- Reviewed Koza’s *Genetic Programming* manuscript [1]. This supports our proposed expression-tree representation, subtree crossover and subtree mutation. It also informed our use of protected division to handle division by zero.
+- Reviewed Ryan and Azad’s *Sensible Initialisation in Chorus* [2]. This strengthened our rationale for combining Full and Grow across different depths to encourage varied initial tree structures.
+- Recognised that the Chorus findings do not directly establish what will work best for our TSP system. We chose ramped half-and-half to encourage structural variety, not because it guarantees better performance.
+
+## Presentation and documentation decisions
+- Prepared short speaker-note bullets explaining the representation, operators and initialisation.
+- Chose IEEE numbered referencing and began building the reference list using sources we have reviewed.
+- Changed our project idea from evolving a Flappy Bird controller to evolving a TSP tour-construction heuristic. The TSP project gives us a clearer way to compare against a simple baseline (nearest neighbour) and investigate generalisation on unseen maps and larger instances.
+
+## References Added
+[1] J. R. Koza, “Genetic programming,” manuscript submitted for the *Encyclopedia of Computer Science and Technology*, ver. 2, Aug. 18, 1997.
+
+[2] C. Ryan and R. M. A. Azad, “Sensible initialisation in Chorus,” in *Proc. European Conf. Genetic Programming (EuroGP)*, Lecture Notes in Computer Science, vol. 2610, 2003, pp. 394–403.
