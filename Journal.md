@@ -81,3 +81,11 @@ We score every tree on the same set of training maps for the whole run, instead 
 [1] J. R. Koza, “Genetic programming,” manuscript submitted for the *Encyclopedia of Computer Science and Technology*, ver. 2, Aug. 18, 1997.
 
 [2] C. Ryan and R. M. A. Azad, “Sensible initialisation in Chorus,” in *Proc. European Conf. Genetic Programming (EuroGP)*, Lecture Notes in Computer Science, vol. 2610, 2003, pp. 394–403.
+
+# 22/11/26 — Refining the Research Question and Literature Review
+
+## Change to the research question
+- Our earlier question (can GP beat nearest neighbour and work on larger unseen maps?) was too broad to test cleanly.
+- Following the lecturer's advice to check the literature first, we narrowed it to one controlled factor:
+  **Does training on a mixture of uniform and clustered maps improve the generalisation of GP-evolved TSP construction heuristics to larger, unseen instances, compared with training on uniform maps alone?**
+- We are not claiming GP for TSP is new. Our contribution is a controlled study of training-layout diversity.
