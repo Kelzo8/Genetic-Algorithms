@@ -89,3 +89,47 @@ We score every tree on the same set of training maps for the whole run, instead 
 - Following the lecturer's advice to check the literature first, we narrowed it to one controlled factor:
   **Does training on a mixture of uniform and clustered maps improve the generalisation of GP-evolved TSP construction heuristics to larger, unseen instances, compared with training on uniform maps alone?**
 - We are not claiming GP for TSP is new. Our contribution is a controlled study of training-layout diversity.
+
+
+# 23/11/26 — Locking the project design
+
+## Selected reference method
+
+- We selected Gil-Gala et al. (2023) as our primary reference method.
+- We will re-implement their individual-rule GP method, not their ensemble methods.
+- Each GP individual is an expression tree that assigns a priority score to an unvisited candidate city.
+- During route construction, the candidate with the highest priority is selected, marked visited, and the features are recomputed.
+- This produces a valid TSP tour by construction and allows the same rule to be applied to unseen maps.
+
+## Terminal and fitness design
+
+- We will use Gil-Gala et al.’s three features: distance from the current city to the candidate, distance from the start city to the candidate, and distance from the current city to the centroid of the remaining cities.
+- We will also include numeric constants.
+- We will use Gil-Gala et al.’s original fitness function: the inverse of the mean tour length across the training maps.
+- Lower fitness is better because a shorter average training tour gives a larger denominator and therefore a smaller fitness value.
+- Nearest neighbour will be used only as an evaluation baseline, not in the training fitness function.
+
+## Controlled experiment
+
+- Our main comparison is uniform-only training versus mixed uniform–clustered training.
+- Condition A will use 10 uniform training maps.
+- Condition B will use 5 uniform and 5 clustered training maps.
+- Both conditions will use the same city-count distribution, GP settings, computational budget, validation maps and test maps.
+- Training maps will contain 20–50 cities.
+- We will evaluate selected rules on unseen uniform and clustered maps with 50, 100 and 200 cities, as well as selected TSPLIB instances.
+- Nearest neighbour and nearest insertion will be used as baselines.
+
+## Validation and reproducibility
+
+- We will use separate validation maps to select the final rule from each independent GP run.
+- Test maps will never be used to select rules, tune parameters or choose features.
+- We will record seeds and configurations to make results reproducible.
+- We will run at least 30 independent runs per condition.
+
+## Presentation updates
+
+- Updated the presentation to match the locked project design.
+- Corrected the route-construction rule so that the highest-priority candidate is selected.
+- Removed outdated references to additional terminals.
+- Added speaker notes matching the current representation, evolutionary process and experimental design.
+- Remaining tasks: resolve the stated number of runs, complete references and verify implementation-specific claims.
