@@ -9,6 +9,8 @@ Named gp_config.py (not config.py) so it is tracked by Git: the root
 .gitignore excludes the GA's local config.py override.
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 
 
