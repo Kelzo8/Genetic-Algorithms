@@ -10,7 +10,7 @@ def make_fitness_function(
     terminals: Sequence[object],
     functions: Mapping[str, tuple[Callable[..., object], int]],
 ) -> Callable[[object], float]:
-    """Return a minimisation fitness function based on reciprocal mean length."""
+    """Return mean tour length for GP's lower-is-better fitness convention."""
     instances = tuple(training_instances)
     if not instances:
         raise ValueError("training_instances must not be empty")
@@ -24,7 +24,7 @@ def make_fitness_function(
             mean_length = math.fsum(lengths) / len(lengths)
             if not math.isfinite(mean_length) or mean_length <= 0.0:
                 return math.inf
-            return 1.0 / mean_length
+            return mean_length
         except (ArithmeticError, KeyError, TypeError, ValueError):
             return math.inf
 

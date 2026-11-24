@@ -55,9 +55,22 @@ def test_nearest_neighbour_tour_and_seeded_generation_are_deterministic():
     assert nearest_neighbour_tour(first) == nearest_neighbour_tour(second)
 
 
-def test_fitness_is_reciprocal_mean_constructed_tour_length():
+def test_fitness_returns_mean_constructed_tour_length():
     fitness = make_fitness_function([FOUR_CITIES], TERMINALS, FUNCTIONS)
-    assert math.isclose(fitness("D_cn"), 1.0 / 18.0)
+    assert math.isclose(fitness("D_cn"), 18.0)
+
+
+def test_shorter_tour_rule_receives_lower_fitness():
+    fitness = make_fitness_function([FOUR_CITIES], TERMINALS, FUNCTIONS)
+    longer_rule = "D_cn"
+    shorter_rule = ("neg", "D_cn")
+
+    longer_fitness = fitness(longer_rule)
+    shorter_fitness = fitness(shorter_rule)
+
+    assert math.isclose(longer_fitness, 18.0)
+    assert math.isclose(shorter_fitness, 14.0)
+    assert shorter_fitness < longer_fitness
 
 
 def test_fitness_returns_infinity_for_zero_mean_length():
